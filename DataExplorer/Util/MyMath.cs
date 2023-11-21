@@ -134,5 +134,24 @@ namespace SpaceEngine.Util
         {
             return degrees * MathF.PI / 180.0f;
         }
+        public static bool RaySphereIntersect(Vector3 rayOrigin, Vector3 rayDir, Vector3 sphereCenter, float sphereRadius, out Vector3 intersectionPoint)
+        {
+            intersectionPoint = Vector3.Zero;
+
+            Vector3 oc = rayOrigin - sphereCenter;
+            float a = Vector3.Dot(rayDir, rayDir);
+            float b = 2.0f * Vector3.Dot(oc, rayDir);
+            float c = Vector3.Dot(oc, oc) - (sphereRadius * sphereRadius);
+            float discriminant = b * b - 4 * a * c;
+
+            if (discriminant > 0)
+            {
+                float t = (-b - MathF.Sqrt(discriminant)) / (2.0f * a);
+                intersectionPoint = rayOrigin + t * rayDir;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -10,6 +10,7 @@ layout (location = 1) out vec4 gNormal;
 layout (location = 2) out vec4 gPosition;
 layout (location = 3) out vec4 gMaterials;
 
+uniform int countryHighlights[255];
 uniform sampler2D albedoTexture;
 uniform sampler2D topographyTexture;
 uniform sampler2D countryDataTexture;
@@ -52,11 +53,18 @@ void drawLongitudeLines() {
 }
 
 void drawBorders() {
-	vec3 borderColor = vec3(1.0, 0.0, 0.0);
-	float borderAmount = texture(countryDataTexture, fragUV).r;
-	borderAmount *= 0.5f;
-	gAlbedo.rgb = mix(gAlbedo.rgb,borderColor, borderAmount);
+	float strength = texture(countryDataTexture, fragUV).g;
+	vec3 borderColor = vec3(1.0, 0.2, 0.1)*strength;
+	gAlbedo.rgb = mix(gAlbedo.rgb,borderColor, strength);
 
+}
+void drawCountryHighligts() {
+	int id =int( texture(countryDataTexture, fragUV).r*255.0);
+	if (countryHighlights[id] == 1) {
+
+	vec3 hightlightColour = vec3(1.0, 0.0, 0.0);
+	gAlbedo.rgb = mix(gAlbedo.rgb, hightlightColour, 0.5);
+	}
 }
 
 void main() {
@@ -64,9 +72,10 @@ void main() {
 	//albedo = vec3(1.0f);
 	gAlbedo = vec4(albedo, 1.0);
 
-	drawLatitudeLines();
-	drawLongitudeLines();
+	//drawLatitudeLines();
+	//drawLongitudeLines();
 	drawBorders();
+	drawCountryHighligts();
 
 	vec3 normal_tangent = calcNormal();
 	//normal_tangent.x *= -1f;

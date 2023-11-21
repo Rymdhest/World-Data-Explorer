@@ -1,5 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace SpaceEngine.RenderEngine
 {
@@ -159,6 +161,33 @@ namespace SpaceEngine.RenderEngine
         public Vector2i getResolution()
         {
             return settings.resolution;
+        }
+
+        public void saveRenderAttachmentToFile(int attachmentNumber, string filenName)
+        {
+            bind();
+            int width = settings.resolution.X;
+            int height = settings.resolution.Y;
+            byte[] pixels = new byte[width * height * 4]; //RGBA
+            GL.ReadPixels(0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+            for (int i = 0; i < pixels.Length; i += 4)
+            {
+                byte temp = pixels[i];      // Save red channel
+                pixels[i] = pixels[i + 2];  // Set red channel to blue
+                pixels[i + 2] = temp;       // Set blue channel to saved red
+            }
+            if (File.Exists(filenName+".png"))
+            {
+                File.Delete(filenName+".png");
+            }
+            using (var bitmap = new Bitmap(width, height))
+            {
+                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, width, height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
+                bitmap.UnlockBits(bmpData);
+                bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                bitmap.Save(filenName+".png", System.Drawing.Imaging.ImageFormat.Png);
+            }
         }
     }
 }

@@ -88,9 +88,9 @@ namespace SpaceEngine.RenderEngine
             postProcessingRenderer.doPostProcessing(screenQuadRenderer, geometryPassRenderer.gBuffer, sunEntity, camera.getComponent<Transformation>().position, viewMatrix, projectionMatrix);
            simpleShader.bind();
             simpleShader.loadUniformInt("blitTexture", 0);
-            //screenQuadRenderer.renderTextureToScreen(screenQuadRenderer.getLastOutputTexture());
+            screenQuadRenderer.renderTextureToScreen(screenQuadRenderer.getLastOutputTexture());
             //screenQuadRenderer.renderTextureToScreen(geometryPassRenderer.gBuffer.getRenderAttachment(3));
-            screenQuadRenderer.renderTextureToScreen(Engine.earth.dataFrameBuffer.getRenderAttachment(0));
+            //screenQuadRenderer.renderTextureToScreen(Engine.earth.dataFrameBuffer.getRenderAttachment(0));
             simpleShader.unBind();
 
 

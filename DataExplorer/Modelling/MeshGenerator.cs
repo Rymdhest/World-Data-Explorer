@@ -132,7 +132,7 @@ namespace SpaceEngine.Modelling
 
         public static Mesh generateEarth()
         {
-            Mesh mesh = CreateIcosphere(5);
+            Mesh mesh = CreateIcosphere(7);
 
 
             Bitmap heightMap = new Bitmap("Textures\\" + TextureMaster.earthTopography.name + ".png");

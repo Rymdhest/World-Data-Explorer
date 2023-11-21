@@ -6,9 +6,9 @@ namespace SpaceEngine.Shaders
 {
     internal class ShaderProgram
     {
-        private int programID;
+        public int programID;
         private int vertexShaderID;
-        private int fragmentShaderID;
+        public int fragmentShaderID;
         private int geometryShaderID;
 
         private Dictionary<string, int> uniforms;

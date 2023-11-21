@@ -5,7 +5,11 @@ using StbImageSharp;
 
 namespace DataExplorer.Modelling
 {
-
+    public class TextureSettings
+    {
+        public TextureMinFilter minFilter = TextureMinFilter.Linear;
+        public TextureMagFilter magFilter = TextureMagFilter.Linear;
+    }
     public class Texture
     {
         public int textureID;
@@ -32,7 +36,11 @@ namespace DataExplorer.Modelling
 
         }
 
-        private static Texture loadTexture(string fileName)
+        public static Texture loadTexture(string fileName)
+        {
+            return TextureMaster.loadTexture(fileName, new TextureSettings());
+        }
+        public static Texture loadTexture(string fileName, TextureSettings settings)
         {
             int textureID = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, textureID);
@@ -40,8 +48,8 @@ namespace DataExplorer.Modelling
             StbImage.stbi_set_flip_vertically_on_load(1);
 
             ImageResult image = ImageResult.FromStream(File.OpenRead("Textures\\"+fileName+".png"), ColorComponents.RedGreenBlueAlpha);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)settings.minFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)settings.magFilter);
 
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);

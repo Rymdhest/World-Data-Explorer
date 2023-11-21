@@ -73,13 +73,18 @@ namespace SpaceEngine.RenderEngine
 
         private void renderEarth(ComponentSystem smoothShadeEntities, Matrix4 viewMatrix, Matrix4 projectionMatrix)
         {
+
+            Engine.earth.countryHighlights[1] = 0;
+            Engine.earth.countryHighlights[2] = 0;
+            Engine.earth.countryHighlights[3] = 1;
+
             earthShader.bind();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, TextureMaster.earthAlbedo.textureID);
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, TextureMaster.earthTopography.textureID);
             GL.ActiveTexture(TextureUnit.Texture2);
-            GL.BindTexture(TextureTarget.Texture2D, Engine.earth.dataFrameBuffer.getRenderAttachment(0));
+            GL.BindTexture(TextureTarget.Texture2D, Engine.earth.countriesDataTexture.textureID);
             earthShader.loadUniformVector2f("heightmapSize", TextureMaster.earthTopography.resolution);
             foreach (Model model in smoothShadeEntities.getMembers())
             {
@@ -90,6 +95,7 @@ namespace SpaceEngine.RenderEngine
                 earthShader.loadUniformMatrix4f("modelViewMatrix", modelViewMatrix);
                 earthShader.loadUniformMatrix4f("modelViewProjectionMatrix", modelViewMatrix * projectionMatrix);
                 earthShader.loadUniformMatrix4f("normalModelViewMatrix", Matrix4.Transpose(Matrix4.Invert(modelViewMatrix)));
+                earthShader.loadUniformIntArray("countryHighlights", Engine.earth.countryHighlights);
                 GL.BindVertexArray(glModel.getVAOID());
                 GL.EnableVertexAttribArray(0);
                 GL.EnableVertexAttribArray(1);
