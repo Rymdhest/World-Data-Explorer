@@ -40,7 +40,7 @@ namespace SpaceEngine.RenderEngine
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             renderTexture(texture);
         }
-        public void render(bool depthTest = false, bool depthMask = false, bool blend = false, bool clearColor = true)
+        public static void render(bool depthTest = false, bool depthMask = false, bool blend = false, bool clearColor = true)
         {
             GL.BindVertexArray(quadModel.getVAOID());
             GL.EnableVertexAttribArray(0);

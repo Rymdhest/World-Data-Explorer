@@ -10,10 +10,11 @@ layout (location = 1) out vec4 gNormal;
 layout (location = 2) out vec4 gPosition;
 layout (location = 3) out vec4 gMaterials;
 
-uniform int countryHighlights[255];
+uniform int countryHighlights[256];
 uniform sampler2D albedoTexture;
 uniform sampler2D topographyTexture;
 uniform sampler2D countryDataTexture;
+uniform sampler2DArray flagsArrayTexture;
 uniform mat4 normalModelViewMatrix;
 uniform mat4 viewMatrix;
 uniform vec2 heightmapSize;
@@ -23,12 +24,12 @@ vec3 calcNormal() {
 	float uvPixelY = 1/ heightmapSize.y;
 
 	float center = texture(topographyTexture, fragUV).r;
-	float left = texture(topographyTexture, fragUV-vec2(-uvPixelX, 0)).r;
-	float right = texture(topographyTexture, fragUV+vec2(-uvPixelX, 0)).r;
+	float left = texture(topographyTexture, fragUV+vec2(-uvPixelX, 0)).r;
+	float right = texture(topographyTexture, fragUV+vec2(uvPixelX, 0)).r;
 	float up = texture(topographyTexture, fragUV+vec2(0, uvPixelY)).r;
 	float down = texture(topographyTexture, fragUV+vec2(0, -uvPixelY)).r;
 
-    vec3 normal =normalize( vec3(2.0*(right-left), 2.0*(down-up), -1.0));
+    vec3 normal =normalize( vec3(2.0*(right-left), 2.0*(down-up), -0.4));
     return normal;
 }
 
@@ -62,15 +63,21 @@ void drawCountryHighligts() {
 	int id =int( texture(countryDataTexture, fragUV).r*255.0);
 	if (countryHighlights[id] == 1) {
 
-	vec3 hightlightColour = vec3(1.0, 0.0, 0.0);
-	gAlbedo.rgb = mix(gAlbedo.rgb, hightlightColour, 0.5);
+	vec3 hightlightColour = vec3(1.0, 0.0, 1.0);
+	gAlbedo.rgb = mix(gAlbedo.rgb, hightlightColour, 0.75);
 	}
 }
 
 void main() {
-	vec3 albedo =texture(albedoTexture, fragUV).rgb;
+	vec3 albedo = texture(albedoTexture, fragUV).rgb;
 	//albedo = vec3(1.0f);
 	gAlbedo = vec4(albedo, 1.0);
+
+	int id =int( texture(countryDataTexture, fragUV).r*255.0);
+	if (id >0) {
+		//gAlbedo.rgb = texture(flagsArrayTexture, vec3(fragUV*40, id)).rgb; // Assuming TexCoord.z is the array layer index
+		//gAlbedo = vec4(1.0);
+	}
 
 	//drawLatitudeLines();
 	//drawLongitudeLines();
@@ -78,8 +85,8 @@ void main() {
 	drawCountryHighligts();
 
 	vec3 normal_tangent = calcNormal();
-	//normal_tangent.x *= -1f;
-	//normal_tangent.y *= -1f;
+	normal_tangent.x *= -1f;
+	normal_tangent.y *= -1f;
 	gNormal.xyz = normalize(normal_tangent*transpose(TBN));
 	//gNormal.x *= -1; // WTF HACK??????
 	//gNormal.y *= -1; // WTF HACK??????

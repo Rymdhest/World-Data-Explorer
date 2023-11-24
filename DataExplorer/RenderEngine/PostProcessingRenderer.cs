@@ -84,7 +84,7 @@ namespace SpaceEngine.RenderEngine
             bloomRenderer.applyBloom(renderer, gBuffer);
             //GL.Finish();
             //Stopwatch stopwatch = Stopwatch.StartNew();
-            //applyScreenSpaceReflections(renderer, gBuffer, projectionMatrix, sunEntity.getComponent<Sun>());
+            applyScreenSpaceReflections(renderer, gBuffer, projectionMatrix, sunEntity.getComponent<Sun>());
             //GL.Finish();
             //Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds);
 
@@ -127,7 +127,7 @@ namespace SpaceEngine.RenderEngine
             GL.BindTexture(TextureTarget.Texture2D, renderer.getLastOutputTexture());
 
             //GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            renderer.render(depthTest :true, depthMask:false, blend :false, clearColor:false);
+            ScreenQuadRenderer.render(depthTest :true, depthMask:false, blend :false, clearColor:false);
             //renderer.stepToggle();
             skyShader.unBind();
 
@@ -162,7 +162,7 @@ namespace SpaceEngine.RenderEngine
             ScreenSpaceReflectionShader.loadUniformMatrix4f("projectionMatrix", projectionMatrix);
             ScreenSpaceReflectionShader.loadUniformVector3f("skyColor", sun.getSkyColorGround());
             gaussianBlurRenderer.getRootHBlurFBO().bind();
-            renderer.render();
+            ScreenQuadRenderer.render();
             ScreenSpaceReflectionShader.unBind();
 
             gaussianBlurRenderer.renderGaussianBlur(renderer, gaussianBlurRenderer.getRootHBlurFBO().getRenderAttachment(0), 1);

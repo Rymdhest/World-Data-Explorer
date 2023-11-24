@@ -53,6 +53,7 @@ namespace SpaceEngine.RenderEngine
             earthShader.loadUniformInt("albedoTexture", 0);
             earthShader.loadUniformInt("topographyTexture", 1);
             earthShader.loadUniformInt("countryDataTexture", 2);
+            earthShader.loadUniformInt("flagsArrayTexture", 3); 
             earthShader.unBind();
 
 
@@ -73,11 +74,6 @@ namespace SpaceEngine.RenderEngine
 
         private void renderEarth(ComponentSystem smoothShadeEntities, Matrix4 viewMatrix, Matrix4 projectionMatrix)
         {
-
-            Engine.earth.countryHighlights[1] = 0;
-            Engine.earth.countryHighlights[2] = 0;
-            Engine.earth.countryHighlights[3] = 1;
-
             earthShader.bind();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, TextureMaster.earthAlbedo.textureID);
@@ -85,6 +81,8 @@ namespace SpaceEngine.RenderEngine
             GL.BindTexture(TextureTarget.Texture2D, TextureMaster.earthTopography.textureID);
             GL.ActiveTexture(TextureUnit.Texture2);
             GL.BindTexture(TextureTarget.Texture2D, Engine.earth.countriesDataTexture.textureID);
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.BindTexture(TextureTarget.Texture2DArray, Engine.earth.flagsTextureArray.textureID);
             earthShader.loadUniformVector2f("heightmapSize", TextureMaster.earthTopography.resolution);
             foreach (Model model in smoothShadeEntities.getMembers())
             {

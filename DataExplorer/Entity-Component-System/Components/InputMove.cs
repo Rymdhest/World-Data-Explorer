@@ -20,7 +20,7 @@ namespace SpaceEngine.Entity_Component_System.Components
                 moveAmount *= 20f;
             }
 
-            if (WindowHandler.gameWindow.IsMouseButtonDown(MouseButton.Left))
+            if (WindowHandler.gameWindow.IsMouseButtonDown(MouseButton.Right))
             {
                 transformation.addRotation(new Vector3(0f, mouseTurnAmount * WindowHandler.gameWindow.MouseState.Delta.X, 0f));
                 transformation.addRotation(new Vector3(mouseTurnAmount * WindowHandler.gameWindow.MouseState.Delta.Y, 0, 0f));

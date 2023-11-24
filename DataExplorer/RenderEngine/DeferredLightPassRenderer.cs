@@ -110,7 +110,7 @@ namespace SpaceEngine.RenderEngine
             GL.ColorMask(1, false, false, false, false);
             GL.ColorMask(2, false, false, false, false);
             GL.ColorMask(3, false, false, false, false);
-            renderer.render();  
+            ScreenQuadRenderer.render();  
             GL.ColorMask(0,true, true, true, true);
             GL.ColorMask(1,true, true, true, true);
             GL.ColorMask(2,true, true, true, true);

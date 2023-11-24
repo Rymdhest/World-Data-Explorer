@@ -70,14 +70,17 @@ namespace SpaceEngine.Core
             windowHandler.update(delta);
             entityManager.update(delta);
             masterRenderer.update(delta);
+            masterRenderer.updateViewMatrix(entityManager.camera.getComponent<Transformation>());
+
+            earth.update(entityManager.camera.getComponent<Transformation>().position);
+
             inputHandler.update(delta);
         }
 
         private void render()
         {
             windowHandler.render();
-            Matrix4 viewMatrix = MyMath.createViewMatrix(entityManager.camera.getComponent<Transformation>());
-            masterRenderer.render(viewMatrix, entityManager.camera, entityManager.sun, EntityManager.pointLightSystem); 
+            masterRenderer.render(entityManager.camera, entityManager.sun, EntityManager.pointLightSystem); 
         }
     }
 }

@@ -133,6 +133,7 @@ namespace SpaceEngine.Modelling
         public static Mesh generateEarth()
         {
             Mesh mesh = CreateIcosphere(7);
+            float mountainHeightScale = 0.0001f;
 
 
             Bitmap heightMap = new Bitmap("Textures\\" + TextureMaster.earthTopography.name + ".png");
@@ -143,7 +144,7 @@ namespace SpaceEngine.Modelling
                 int pixelX = Math.Clamp((int)(vertex.UV.X * TextureMaster.earthTopography.resolution.X), 0, TextureMaster.earthTopography.resolution.X - 1);
                 int pixelY = Math.Clamp((int)(vertex.UV.Y * TextureMaster.earthTopography.resolution.Y), 0, TextureMaster.earthTopography.resolution.Y - 1);
 
-                float heightScale = 1f + 0.00012f * Convert.ToInt32(heightMap.GetPixel(pixelX, TextureMaster.earthTopography.resolution.Y - pixelY - 1).R);
+                float heightScale = 1f + mountainHeightScale * Convert.ToInt32(heightMap.GetPixel(pixelX, TextureMaster.earthTopography.resolution.Y - pixelY - 1).R);
                 //heightScale = 1f;
                 vertex.position.X *= heightScale;
                 vertex.position.Y *= heightScale;

@@ -65,7 +65,7 @@ namespace SpaceEngine.RenderEngine
                 VsampleFramebuffers[i].bind();
                 vBlurShader.bind();
                 vBlurShader.loadUniformFloat("targetHeight", VsampleFramebuffers[i].getResolution().Y);
-                renderer.render();
+                ScreenQuadRenderer.render();
                 vBlurShader.unBind();
 
 
@@ -74,7 +74,7 @@ namespace SpaceEngine.RenderEngine
                 hBlurShader.loadUniformFloat("targetWidth", HsampleFramebuffers[i].getResolution().X);
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, VsampleFramebuffers[i].getRenderAttachment(0));
-                renderer.render();
+                ScreenQuadRenderer.render();
                 hBlurShader.unBind();
 
                 vBlurShader.bind();
@@ -86,7 +86,7 @@ namespace SpaceEngine.RenderEngine
             VsampleFramebuffers[0].bind();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, HsampleFramebuffers[downSamples - 1].getRenderAttachment(0));
-            renderer.render();
+            ScreenQuadRenderer.render();
         }
         public int getLastFinishedBlur()
         {

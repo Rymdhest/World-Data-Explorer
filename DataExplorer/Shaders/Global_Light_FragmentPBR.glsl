@@ -123,7 +123,7 @@ void main(void){
 
 	color = mix(color, albedo , clamp(emission, 0, 1));
 
-	color = applyFog(color, -position.z, -viewDir);
+	//color = applyFog(color, -position.z, -viewDir);
 	//color = color / (color + vec3(1.0));
     //color = pow(color, vec3(1.0/2.2));  
 	//lighting = applyFog(lighting, -position.z, -viewDir);

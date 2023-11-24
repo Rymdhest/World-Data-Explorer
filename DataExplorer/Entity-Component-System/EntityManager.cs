@@ -36,7 +36,7 @@ namespace SpaceEngine.Entity_Component_System.Components
             plane.addComponent(new Model(glLoader.loadToVAO(MeshGenerator.generatePlane(new Vector2(400, 200))), MasterRenderer.Pipeline.SMOOTH_SHADING));
 
             Entity plane2 = new Entity();
-            plane2.addComponent(new Transformation(new Vector3(0, 0, -400), new Vector3(0, 0, 0), 1));
+            plane2.addComponent(new Transformation(new Vector3(0, -200, -400), new Vector3(-MathF.PI/4, 0, 0), 1));
             plane2.addComponent(new Model(glLoader.loadToVAO(MeshGenerator.generatePlane(new Vector2(400, 200))), MasterRenderer.Pipeline.SMOOTH_SHADING));
 
 

@@ -71,7 +71,7 @@ namespace SpaceEngine.RenderEngine
             GL.BindTexture(TextureTarget.Texture2D, renderer.getLastOutputTexture());
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, gBuffer.getRenderAttachment(3));
-            renderer.render();
+            ScreenQuadRenderer.render();
             bloomFilterShader.unBind();
             downsamplingShader.bind();
             for (int i = 0; i< downSamples-1; i++)
@@ -81,7 +81,7 @@ namespace SpaceEngine.RenderEngine
                 GL.BindTexture(TextureTarget.Texture2D, sampleFramebuffers[i].getRenderAttachment(0));
                 downsamplingShader.loadUniformVector2f("srcResolution", sampleFramebuffers[i].getResolution());
                 downsamplingShader.loadUniformInt("mipLevel", i);
-                renderer.render(clearColor: true);
+                ScreenQuadRenderer.render(clearColor: true);
 
             }
 
@@ -105,14 +105,14 @@ namespace SpaceEngine.RenderEngine
                     renderer.getNextFrameBuffer().bind();
                     GL.ActiveTexture(TextureUnit.Texture0);
                     GL.BindTexture(TextureTarget.Texture2D, sampleFramebuffers[i].getRenderAttachment(0));
-                    renderer.render(blend: false, clearColor: true);
+                    ScreenQuadRenderer.render(blend: false, clearColor: true);
                     //renderer.stepToggle();
                 } else
                 {
                     GL.ActiveTexture(TextureUnit.Texture0);
                     GL.BindTexture(TextureTarget.Texture2D, sampleFramebuffers[i].getRenderAttachment(0));
                     //upsamplingShader.loadUniformVector2f("srcResolution", sampleFramebuffers[i].getResolution());
-                    renderer.render(blend: true, clearColor: false);
+                    ScreenQuadRenderer.render(blend: true, clearColor: false);
                 }
 
             }

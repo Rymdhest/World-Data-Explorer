@@ -10,6 +10,7 @@ using SpaceEngine.Modelling;
 using System.Diagnostics;
 using DataExplorer.Modelling;
 using DataExplorer.DataEarth;
+using SpaceEngine.Util;
 
 namespace SpaceEngine.RenderEngine
 {
@@ -17,7 +18,8 @@ namespace SpaceEngine.RenderEngine
     {
         public enum Pipeline {FLAT_SHADING, SMOOTH_SHADING, POST_GEOMETRY, OTHER};
         public static ShaderProgram simpleShader = new ShaderProgram("Simple_Vertex", "Simple_Fragment");
-        private Matrix4 projectionMatrix;
+        private static Matrix4 projectionMatrix;
+        private static Matrix4 viewMatrix;
         public static float fieldOfView;
         public static float near = 0.1f;
         public static float far = 1000f;
@@ -37,6 +39,12 @@ namespace SpaceEngine.RenderEngine
             shadowRenderer = new ShadowRenderer();
             updateProjectionMatrix();
         }
+
+        public void updateViewMatrix(Transformation transformation)
+        {
+            viewMatrix = MyMath.createViewMatrix(transformation);
+        }
+
         private void updateProjectionMatrix()
         {
 
@@ -60,6 +68,14 @@ namespace SpaceEngine.RenderEngine
 
         }
 
+        public static Matrix4 getProjectionMatrix()
+        {
+            return projectionMatrix;
+        }
+        public static Matrix4 getViewMatrix()
+        {
+            return viewMatrix;
+        }
         public void finishFrame()
         {
 
@@ -68,7 +84,7 @@ namespace SpaceEngine.RenderEngine
             WindowHandler.getWindow().SwapBuffers();
         }
    
-        public void render(Matrix4 viewMatrix, Entity camera, Entity sunEntity, ComponentSystem pointLights)
+        public void render(Entity camera, Entity sunEntity, ComponentSystem pointLights)
         {
             prepareFrame();
 
@@ -89,7 +105,7 @@ namespace SpaceEngine.RenderEngine
            simpleShader.bind();
             simpleShader.loadUniformInt("blitTexture", 0);
             screenQuadRenderer.renderTextureToScreen(screenQuadRenderer.getLastOutputTexture());
-            //screenQuadRenderer.renderTextureToScreen(geometryPassRenderer.gBuffer.getRenderAttachment(3));
+            //screenQuadRenderer.renderTextureToScreen(geometryPassRenderer.gBuffer.getRenderAttachment(1));
             //screenQuadRenderer.renderTextureToScreen(Engine.earth.dataFrameBuffer.getRenderAttachment(0));
             simpleShader.unBind();
 

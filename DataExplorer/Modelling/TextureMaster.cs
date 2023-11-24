@@ -22,6 +22,29 @@ namespace DataExplorer.Modelling
             this.resolution = resolution;
             this.name = name;
         }
+        public byte[] getGPUMemoryData()
+        {
+            GL.ReadBuffer(ReadBufferMode.Back);
+            byte[] imageData = new byte[resolution.X * resolution.Y * 4];
+            GL.BindTexture(TextureTarget.Texture2D, textureID);
+            GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgba, PixelType.UnsignedByte, imageData);
+
+            return imageData;
+        }
+        public byte[] getGPUMemoryAtUV(Vector2 uv)
+        {
+
+            byte[] imageData = getGPUMemoryData();
+            int x = (int)(uv.X * (resolution.X-1));
+            int y = (int)(uv.Y * (resolution.Y-1));
+            int pixelIndex = (y * resolution.X + x)*4;
+            byte red = imageData[pixelIndex];
+            byte green = imageData[pixelIndex + 1];
+            byte blue = imageData[pixelIndex + 2];
+            byte alpha = imageData[pixelIndex + 3];
+
+            return new byte[] { red, green, blue, alpha};
+        }
     }
     internal class TextureMaster
     {
